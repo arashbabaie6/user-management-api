@@ -11,11 +11,11 @@ export class UsersService {
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.prisma.user.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(email: string) {
+    return this.prisma.user.findUnique({ where: { email }});
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
