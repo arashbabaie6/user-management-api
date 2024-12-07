@@ -2,9 +2,8 @@ import { Role } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
-  IsEmail,
+  IsEmail
 } from 'class-validator';
-
 
 export class UserAttributesEmailDto {
   @IsNotEmpty()
@@ -12,7 +11,7 @@ export class UserAttributesEmailDto {
   @ApiProperty()
   email: string;
 }
-// User Attributes class
+
 export class UserAttributesDto {
   @ApiProperty()
   name: string;
@@ -27,7 +26,6 @@ export class UserAttributesDto {
   password: string;
 }
 
-// User Data class 
 export class UserDto {
   @ApiProperty({ default: 'user' })
   type: string;
@@ -39,7 +37,6 @@ export class UserDto {
   attributes: UserAttributesDto;
 }
 
-// Pagination class (can be reused)
 export class PaginationDto {
   @ApiProperty({ example: 1 })
   currentPage: number;
@@ -57,7 +54,6 @@ export class PaginationDto {
   hasNextPage: boolean;
 }
 
-// FindAllUserDto (combines data and pagination)
 export class FindAllUserResponseDto {
   @ApiProperty({ isArray: true, type: UserDto })
   data: UserDto[];
