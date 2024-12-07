@@ -3,6 +3,10 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersTransformer } from './users.transformer'; 
+import { ApiQuery } from '@nestjs/swagger';
+
+const DEFAULT_PER_PAGE = 2;
+const DEFAULT_PAGE = 1;
 
 @Controller('users')
 export class UsersController {
@@ -14,9 +18,23 @@ export class UsersController {
   }
 
   @Get()
+  @ApiQuery({
+    name: 'perPage',
+    description: 'Items per page',
+    type: Number,
+    required: false,
+    default: DEFAULT_PER_PAGE
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Current Page',
+    type: Number,
+    required: false,
+    default: DEFAULT_PAGE
+  })
   async findAll(
-    @Query('page') page = 1,
-    @Query('perPage') perPage = 2,
+    @Query('page') page = DEFAULT_PAGE,
+    @Query('perPage') perPage = DEFAULT_PER_PAGE,
   ) {
     const pagination = { page: +page, perPage: +perPage };
     const { users, totalCount } = await this.usersService.findAll(pagination);
@@ -33,8 +51,8 @@ export class UsersController {
     return this.usersService.update(email, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Delete(':email')
+  remove(@Param('email') email: string) {
+    return this.usersService.remove(email);
   }
 }

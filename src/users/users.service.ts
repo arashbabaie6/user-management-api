@@ -34,7 +34,7 @@ export class UsersService {
     return this.prisma.user.update({ where: { email }, data: { name: updateUserDto.name, password: updateUserDto.password } })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(email: string) {
+    return this.prisma.user.delete({ where: { email } })
   }
 }
