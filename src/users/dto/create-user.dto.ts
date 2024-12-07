@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 
 export class CreateUserDto {
-  @ApiProperty({ readOnly: true })
+  @ApiProperty()
   email: string;
 
   @ApiProperty()
