@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -14,9 +14,13 @@ export class UsersController {
   }
 
   @Get()
-  async findAll() {
-    const users = await this.usersService.findAll();
-    return { data: UsersTransformer.toJSONAPICollection(users) }
+  async findAll(
+    @Query('page') page = 1,
+    @Query('perPage') perPage = 2,
+  ) {
+    const pagination = { page: +page, perPage: +perPage };
+    const { users, totalCount } = await this.usersService.findAll(pagination);
+    return UsersTransformer.toJSONAPICollection({ users, totalCount, ...pagination });
   }
 
   @Get(':email')
