@@ -30,19 +30,19 @@ export class UserDto {
 
 // Pagination class (can be reused)
 export class PaginationDto {
-  @ApiProperty({ default: 1 })
+  @ApiProperty({ example: 1 })
   currentPage: number;
 
-  @ApiProperty({ default: 2 })
+  @ApiProperty({ example: 2 })
   perPage: number;
 
-  @ApiProperty({ default: 10 })
+  @ApiProperty({ example: 10 })
   totalItems: number;
 
-  @ApiProperty({ default: 5 })
+  @ApiProperty({ example: 5 })
   totalPages: number;
 
-  @ApiProperty({ default: true })
+  @ApiProperty({ example: true })
   hasNextPage: boolean;
 }
 

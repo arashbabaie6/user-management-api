@@ -5,9 +5,10 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersTransformer } from './users.transformer'; 
-import { FindAllUserResponseDto } from './dto/find-user.dto';
+import { FindAllUserResponseDto, UserDto } from './dto/find-user.dto';
 
 import decoratorConstant from './users.decorator.constant'
+import { UserEntity } from './entities/user.entity';
 
 @Controller('users')
   @ApiTags('users')
@@ -15,6 +16,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiOkResponse({ type: UserEntity, description: 'Created user response' })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -33,16 +35,19 @@ export class UsersController {
   }
 
   @Get(':email')
+  @ApiOkResponse({type: UserDto, description: 'User details'})
   async findOne(@Param('email') email: string) {
     return await this.usersService.findOne(email);
   }
 
   @Patch(':email')
+  @ApiOkResponse({type: UserDto, description: 'User details'})
   async update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.update(email, updateUserDto);
   }
 
   @Delete(':email')
+  @ApiOkResponse({type: UserDto, description: 'User details'})
   async remove(@Param('email') email: string) {
     return await this.usersService.remove(email);
   }
