@@ -1,16 +1,27 @@
 import { Role } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsNotEmpty,
+  IsEmail,
+} from 'class-validator';
 
+
+export class UserAttributesEmailDto {
+  @IsNotEmpty()
+  @IsEmail()
+  @ApiProperty()
+  email: string;
+}
 // User Attributes class
-export class UserAttributes {
+export class UserAttributesDto {
   @ApiProperty()
   name: string;
 
-  @ApiProperty()
-  email: string;
-
   @ApiProperty({ enum: Role })
   role: string;
+
+  @ApiProperty()
+  email: UserAttributesEmailDto;
 
   @ApiProperty()
   password: string;
@@ -25,7 +36,7 @@ export class UserDto {
   id: string;
 
   @ApiProperty()
-  attributes: UserAttributes;
+  attributes: UserAttributesDto;
 }
 
 // Pagination class (can be reused)

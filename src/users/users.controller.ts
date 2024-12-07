@@ -5,7 +5,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersTransformer } from './users.transformer'; 
-import { FindAllUserResponseDto, UserDto } from './dto/find-user.dto';
+import { FindAllUserResponseDto, UserAttributesEmailDto, UserDto } from './dto/find-user.dto';
 
 import decoratorConstant from './users.decorator.constant'
 import { UserEntity } from './entities/user.entity';
@@ -35,20 +35,20 @@ export class UsersController {
   }
 
   @Get(':email')
-  @ApiOkResponse({type: UserDto, description: 'User details'})
-  async findOne(@Param('email') email: string) {
-    return await this.usersService.findOne(email);
+  @ApiOkResponse({ type: UserDto, description: 'User details' })
+  async findOne(@Param() params: UserAttributesEmailDto) {
+    return await this.usersService.findOne(params.email);
   }
 
   @Patch(':email')
-  @ApiOkResponse({type: UserDto, description: 'User details'})
-  async update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.usersService.update(email, updateUserDto);
+  @ApiOkResponse({ type: UserDto, description: 'User details' })
+  async update(@Param() params: UserAttributesEmailDto, @Body() updateUserDto: UpdateUserDto) {
+    return await this.usersService.update(params.email, updateUserDto);
   }
 
   @Delete(':email')
-  @ApiOkResponse({type: UserDto, description: 'User details'})
-  async remove(@Param('email') email: string) {
-    return await this.usersService.remove(email);
+  @ApiOkResponse({ type: UserDto, description: 'User details' })
+  async remove(@Param() params: UserAttributesEmailDto) {
+    return await this.usersService.remove(params.email);
   }
 }
