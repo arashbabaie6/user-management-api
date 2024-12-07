@@ -1,14 +1,16 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersTransformer } from './users.transformer'; 
-import { ApiQuery } from '@nestjs/swagger';
+import { FindAllUserResponseDto } from './dto/find-user.dto';
 
-const DEFAULT_PER_PAGE = 2;
-const DEFAULT_PAGE = 1;
+import decoratorConstant from './users.decorator.constant'
 
 @Controller('users')
+  @ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -18,23 +20,12 @@ export class UsersController {
   }
 
   @Get()
-  @ApiQuery({
-    name: 'perPage',
-    description: 'Items per page',
-    type: Number,
-    required: false,
-    default: DEFAULT_PER_PAGE
-  })
-  @ApiQuery({
-    name: 'page',
-    description: 'Current Page',
-    type: Number,
-    required: false,
-    default: DEFAULT_PAGE
-  })
+  @ApiQuery(decoratorConstant.apiQuery.perPage)
+  @ApiQuery(decoratorConstant.apiQuery.page)
+  @ApiOkResponse({ type: FindAllUserResponseDto, description: 'List of all users' })
   async findAll(
-    @Query('page') page = DEFAULT_PAGE,
-    @Query('perPage') perPage = DEFAULT_PER_PAGE,
+    @Query('page') page = decoratorConstant.apiQuery.page.default,
+    @Query('perPage') perPage = decoratorConstant.apiQuery.perPage.default,
   ) {
     const pagination = { page: +page, perPage: +perPage };
     const { users, totalCount } = await this.usersService.findAll(pagination);
@@ -42,17 +33,17 @@ export class UsersController {
   }
 
   @Get(':email')
-  findOne(@Param('email') email: string) {
-    return this.usersService.findOne(email);
+  async findOne(@Param('email') email: string) {
+    return await this.usersService.findOne(email);
   }
 
   @Patch(':email')
-  update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(email, updateUserDto);
+  async update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.usersService.update(email, updateUserDto);
   }
 
   @Delete(':email')
-  remove(@Param('email') email: string) {
-    return this.usersService.remove(email);
+  async remove(@Param('email') email: string) {
+    return await this.usersService.remove(email);
   }
 }
