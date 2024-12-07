@@ -3,7 +3,7 @@ import { User } from '@prisma/client';
 export class UsersTransformer {
   static toJSONAPI(user: User) {
     return {
-      type: 'users',
+      type: 'user',
       id: user.id.toString(),
       attributes: {
         name: user.name,
