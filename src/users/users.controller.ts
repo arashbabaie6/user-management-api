@@ -1,14 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiQuery, ApiTags, ApiCreatedResponse } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { ApiOkResponse, ApiQuery, ApiTags, ApiCreatedResponse, ApiBearerAuth } from '@nestjs/swagger';
 
+// Users
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersTransformer } from './users.transformer'; 
 import { FindAllUserResponseDto, UserAttributesEmailDto, UserDto } from './dto/find-user.dto';
-
-import decoratorConstant from './users.decorator.constant'
 import { UserEntity } from './entities/user.entity';
+
+// Authentication
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
+// Constants
+import decoratorConstant from './users.decorator.constant'
 
 @Controller('users')
   @ApiTags('users')
@@ -22,6 +27,8 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiQuery(decoratorConstant.apiQuery.perPage)
   @ApiQuery(decoratorConstant.apiQuery.page)
   @ApiOkResponse({ type: FindAllUserResponseDto, description: 'List of all users' })

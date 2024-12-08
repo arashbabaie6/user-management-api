@@ -15,6 +15,7 @@ import { UsersModule } from 'src/users/users.module';
     PrismaModule,
     PassportModule,
     UsersModule,
+    ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
