@@ -5,7 +5,6 @@ import { ApiOkResponse, ApiQuery, ApiTags, ApiCreatedResponse, ApiBearerAuth } f
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersTransformer } from './users.transformer'; 
 import { FindAllUserResponseDto, UserAttributesEmailDto, UserDto } from './dto/find-user.dto';
 import { UserEntity } from './entities/user.entity';
 
@@ -25,7 +24,7 @@ export class UsersController {
   @Post()
   @ApiCreatedResponse({ type: UserEntity, description: 'Created user response' })
   async create(@Body() createUserDto: CreateUserDto) {
-    return new UserEntity(await this.usersService.create(createUserDto));
+    return await this.usersService.create(createUserDto);
   }
 
   @Get()
@@ -40,12 +39,12 @@ export class UsersController {
     @Query('perPage') perPage = decoratorConstant.apiQuery.perPage.default,
   ) {
     const pagination = { page: +page, perPage: +perPage };
-    const { users, totalCount } = await this.usersService.findAll(pagination);
-    return UsersTransformer.toJSONAPICollection({ users, totalCount, ...pagination });
+    return await this.usersService.findAll(pagination);
   }
 
   @Get(':email')
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserDto, description: 'User details' })
   async findOne(@Param() params: UserAttributesEmailDto) {

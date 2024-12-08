@@ -9,6 +9,8 @@ import { AppController } from './app.controller';
 
 import { AppService } from './app.service';
 
+import { JsonApiResponseInterceptor } from './common/jsonapi-response.interceptor';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -17,6 +19,9 @@ import { AppService } from './app.service';
     UsersModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, {
+    provide: 'APP_INTERCEPTOR',
+    useClass: JsonApiResponseInterceptor,
+  }],
 })
 export class AppModule {}

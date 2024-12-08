@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 import { roundsOfHashing } from './users.constant';
+import { UserEntity } from './entities/user.entity';
 
 interface FindAll {
   page: number;
@@ -29,33 +30,36 @@ export class UsersService {
     return this.prisma.user.create({ data: createUserDto });
   }
 
-  async findAll({ page, perPage }: FindAll) {
+  async findAll({ page, perPage }: FindAll): Promise<{ data: UserEntity[], paginationInformation: { totalCount: number, page: number, perPage: number } }> {
     const skip = (page - 1) * perPage;
-
     const [users, totalCount] = await this.prisma.$transaction([
       this.prisma.user.findMany({ skip, take: perPage }),
       this.prisma.user.count()
     ]);
 
-    return { users, totalCount }
+    return { data: users, paginationInformation: { totalCount, page, perPage } }
   }
 
-  findOne(email: string) {
-    return this.prisma.user.findUniqueOrThrow({ where: { email } });
+  async findOne(email: string) {
+    const user = await this.prisma.user.findUniqueOrThrow({ where: { email } });
+    return { data: user }
   }
 
-  findOneId(id: number) {
-    return this.prisma.user.findUniqueOrThrow({ where: { id } });
+  async findOneId(id: number) {
+    const user = await this.prisma.user.findUniqueOrThrow({ where: { id } });
+    return { data: user }
   }
 
   async update(email: string, updateUserDto: UpdateUserDto) {
     const hashedPassword = await this.hashPassword(updateUserDto.password)
     updateUserDto.password = hashedPassword;
 
-    return this.prisma.user.update({ where: { email }, data: { name: updateUserDto.name, password: updateUserDto.password } })
+    const user = await this.prisma.user.update({ where: { email }, data: { name: updateUserDto.name, password: updateUserDto.password } })
+    return { data: user }
   }
 
-  remove(email: string) {
-    return this.prisma.user.delete({ where: { email } })
+  async remove(email: string) {
+    const user = await this.prisma.user.delete({ where: { email } })
+    return { data: user }
   }
 }
