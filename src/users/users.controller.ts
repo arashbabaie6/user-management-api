@@ -11,6 +11,8 @@ import { UserEntity } from './entities/user.entity';
 
 // Authentication
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard'; 
+import { Roles } from 'src/auth/roles.decorator';
 
 // Constants
 import { decoratorConstant } from './users.constant'
@@ -27,7 +29,8 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth()
   @ApiQuery(decoratorConstant.apiQuery.perPage)
   @ApiQuery(decoratorConstant.apiQuery.page)
@@ -42,18 +45,24 @@ export class UsersController {
   }
 
   @Get(':email')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserDto, description: 'User details' })
   async findOne(@Param() params: UserAttributesEmailDto) {
     return await this.usersService.findOne(params.email);
   }
 
   @Patch(':email')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserDto, description: 'User details' })
   async update(@Param() params: UserAttributesEmailDto, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.update(params.email, updateUserDto);
   }
 
   @Delete(':email')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserDto, description: 'User details' })
   async remove(@Param() params: UserAttributesEmailDto) {
     return await this.usersService.remove(params.email);
