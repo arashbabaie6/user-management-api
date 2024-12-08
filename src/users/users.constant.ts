@@ -1,7 +1,7 @@
 const DEFAULT_PER_PAGE = 2;
 const DEFAULT_PAGE = 1;
 
-export default {
+export const decoratorConstant = {
   apiQuery: {
     perPage: {
       name: 'perPage',
@@ -19,3 +19,5 @@ export default {
     }
   }
 }
+
+export const roundsOfHashing = 10;

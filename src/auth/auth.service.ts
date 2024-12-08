@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+
 import { PrismaService } from './../prisma/prisma.service';
 
 import { AuthEntity } from './entity/auth.entity';
@@ -19,7 +20,8 @@ export class AuthService {
       this.incorrectInput()
     }
 
-    const isPasswordValid = user.password === password;
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    
     if (!isPasswordValid) {
       this.incorrectInput()
     }

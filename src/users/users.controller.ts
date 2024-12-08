@@ -13,7 +13,7 @@ import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 // Constants
-import decoratorConstant from './users.decorator.constant'
+import { decoratorConstant } from './users.constant'
 
 @Controller('users')
   @ApiTags('users')
