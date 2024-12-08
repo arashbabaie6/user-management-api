@@ -12,8 +12,8 @@ interface FindAll {
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
-    return await this.prisma.user.create({ data: createUserDto });
+  create(createUserDto: CreateUserDto) {
+    return this.prisma.user.create({ data: createUserDto });
   }
 
   async findAll({ page, perPage }: FindAll) {

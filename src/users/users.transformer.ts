@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { UserEntity } from "./entities/user.entity";
 
 interface Pagination {
   currentPage: number;
@@ -9,14 +9,14 @@ interface Pagination {
 }
 
 interface ToJSONAPICollectionInput {
-  users: User[];
+  users: UserEntity[];
   totalCount: number;
   perPage: Pagination['perPage'];
   page: number;
 }
 
 export class UsersTransformer {
-  static toJSONAPI(user: User) {
+  static toJSONAPI(user: UserEntity) {
     return {
       type: 'user',
       id: user.id.toString(),
