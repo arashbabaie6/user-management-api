@@ -65,7 +65,6 @@ export class JsonApiResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((source: DataResponse) => {
-        console.log('Here is source', { source })
         const { data, paginationInformation } = source;
 
         // Collection response
@@ -76,7 +75,6 @@ export class JsonApiResponseInterceptor implements NestInterceptor {
           };
         } else {
           // Single resource response
-          console.log({isLogin: this.reflector.get('path', context.getHandler())})
           const isLogin = this.reflector.get('path', context.getHandler()) === 'login';
           return {
             data: this.transformToJSONAPI(data, isLogin),
