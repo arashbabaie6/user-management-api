@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsEmail
 } from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
 
 export class UserAttributesEmailDto {
   @IsNotEmpty()
@@ -19,11 +20,13 @@ export class UserAttributesDto extends UserAttributesEmailDto {
   @ApiProperty({ enum: Role, example: Role.USER })
   role: string;
 }
-
+  
+@Exclude()
 export class UserDto {
   @ApiProperty({ default: 'user' })
   type: string;
 
+  @Expose()
   @ApiProperty()
   id: string;
 

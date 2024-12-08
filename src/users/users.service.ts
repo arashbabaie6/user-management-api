@@ -17,6 +17,7 @@ interface FindAll {
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  // TODO move to common
   async hashPassword(password) {
     return await bcrypt.hash(
       password,
@@ -43,7 +44,7 @@ export class UsersService {
 
   async findOne(email: string) {
     const user = await this.prisma.user.findUniqueOrThrow({ where: { email } });
-    return { data: user }
+    return  user
   }
 
   async findOneId(id: number) {

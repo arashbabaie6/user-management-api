@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, SerializeOptions, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { ApiOkResponse, ApiQuery, ApiTags, ApiCreatedResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 // Users
@@ -42,9 +42,11 @@ export class UsersController {
   }
 
   @Get(':email')
-  @Roles('ADMIN')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth()
+  // @Roles('ADMIN')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @ApiBearerAuth()
+  // @UseInterceptors(ClassSerializerInterceptor)
+  @SerializeOptions({ type: UserDto })
   @ApiOkResponse({ type: UserResponseDto, description: 'User details' })
   async findOne(@Param() params: UserAttributesEmailDto) {
     return await this.usersService.findOne(params.email);
