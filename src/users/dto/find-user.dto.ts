@@ -21,9 +21,6 @@ export class UserAttributesDto {
 
   @ApiProperty()
   email: UserAttributesEmailDto;
-
-  @ApiProperty()
-  password: string;
 }
 
 export class UserDto {

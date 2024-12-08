@@ -29,6 +29,6 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsEnum(Role)
-  @ApiProperty({ required: false, default: Role.USER, enum: Role, readOnly: true })
-  role?: Role = 'USER';
+  @ApiProperty({ default: Role.USER, enum: Role })
+  role: Role;
 }

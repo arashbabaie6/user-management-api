@@ -1,17 +1,9 @@
 import { UserEntity } from "./entities/user.entity";
 
-interface Pagination {
-  currentPage: number;
-  perPage: number;
-  totalItems: number;
-  totalPages: number;
-  hasNextPage: boolean;
-}
-
 interface ToJSONAPICollectionInput {
   users: UserEntity[];
   totalCount: number;
-  perPage: Pagination['perPage'];
+  perPage: number;
   page: number;
 }
 
@@ -23,8 +15,7 @@ export class UsersTransformer {
       attributes: {
         name: user.name,
         email: user.email,
-        role: user.role,
-        password: user.password
+        role: user.role
       }
     };
   }
