@@ -10,20 +10,20 @@ import { UserEntity } from 'src/users/entities/user.entity';
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) { }
 
-  incorrectInput() {
+  static incorrectInput() {
     throw new UnauthorizedException('Email or password is incorrect');
   }
 
   async login(email: string, password: string): Promise<{ data: UserEntity }> {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
-      this.incorrectInput()
+      AuthService.incorrectInput()
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     
     if (!isPasswordValid) {
-      this.incorrectInput()
+      AuthService.incorrectInput()
     }
 
     user.access_token = this.jwtService.sign({ userId: user.id });

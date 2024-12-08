@@ -20,18 +20,15 @@ export class UserEntity implements User {
   role: $Enums.Role;
 
   @ApiProperty({ example: 'yourpassword' })
-  @ApiHideProperty()
-  @Exclude()
   password: string;
 
-  @ApiHideProperty()
-  @Exclude()
+  @ApiProperty()
   access_token: string;
+
+  @ApiProperty()
+  createdAt: Date;
 
   @ApiHideProperty()
   @Exclude()
   updatedAt: Date;
-
-  @ApiProperty()
-  createdAt: Date;
 }

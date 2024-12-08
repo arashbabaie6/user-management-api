@@ -5,8 +5,7 @@ import { ApiOkResponse, ApiQuery, ApiTags, ApiCreatedResponse, ApiBearerAuth } f
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { FindAllUserResponseDto, UserAttributesEmailDto, UserDto } from './dto/find-user.dto';
-import { UserEntity } from './entities/user.entity';
+import { FindAllUserResponseDto, UserAttributesEmailDto, UserDto, UserResponseDto } from './dto/find-user.dto';
 
 // Authentication
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -22,7 +21,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ApiCreatedResponse({ type: UserEntity, description: 'Created user response' })
+  @ApiCreatedResponse({ type: UserResponseDto, description: 'Created user response' })
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
   }
@@ -46,7 +45,7 @@ export class UsersController {
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: UserDto, description: 'User details' })
+  @ApiOkResponse({ type: UserResponseDto, description: 'User details' })
   async findOne(@Param() params: UserAttributesEmailDto) {
     return await this.usersService.findOne(params.email);
   }
@@ -54,7 +53,7 @@ export class UsersController {
   @Patch(':email')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: UserDto, description: 'User details' })
+  @ApiOkResponse({ type: UserResponseDto, description: 'User details' })
   async update(@Param() params: UserAttributesEmailDto, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.update(params.email, updateUserDto);
   }
@@ -62,7 +61,7 @@ export class UsersController {
   @Delete(':email')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: UserDto, description: 'User details' })
+  @ApiOkResponse({ type: UserResponseDto, description: 'User removed' })
   async remove(@Param() params: UserAttributesEmailDto) {
     return await this.usersService.remove(params.email);
   }

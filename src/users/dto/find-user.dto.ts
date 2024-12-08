@@ -1,5 +1,5 @@
 import { Role } from '@prisma/client';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsEmail
@@ -8,19 +8,16 @@ import {
 export class UserAttributesEmailDto {
   @IsNotEmpty()
   @IsEmail()
-  @ApiProperty()
+  @ApiProperty({ example: 'yourEmail@email.com' })
   email: string;
 }
 
-export class UserAttributesDto {
-  @ApiProperty()
+export class UserAttributesDto extends UserAttributesEmailDto {
+  @ApiProperty({ example: 'yourname' })
   name: string;
 
-  @ApiProperty({ enum: Role })
+  @ApiProperty({ enum: Role, example: Role.USER })
   role: string;
-
-  @ApiProperty()
-  email: UserAttributesEmailDto;
 }
 
 export class UserDto {
@@ -49,6 +46,11 @@ export class PaginationDto {
 
   @ApiProperty({ example: true })
   hasNextPage: boolean;
+}
+
+export class UserResponseDto {
+  @ApiProperty()
+  data: UserDto;
 }
 
 export class FindAllUserResponseDto {

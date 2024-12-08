@@ -27,7 +27,8 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const hashedPassword = await this.hashPassword(createUserDto.password)
     createUserDto.password = hashedPassword;
-    return this.prisma.user.create({ data: createUserDto });
+    const user = await this.prisma.user.create({ data: createUserDto });
+    return { data: user }
   }
 
   async findAll({ page, perPage }: FindAll): Promise<{ data: UserEntity[], paginationInformation: { totalCount: number, page: number, perPage: number } }> {
