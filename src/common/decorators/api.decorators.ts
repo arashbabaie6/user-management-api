@@ -14,7 +14,7 @@ export function JsonApiResponse<T>(
   options?: Omit<ApiResponseNoStatusOptions, 'type'>,
 ) {
   const type = JsonApiDtoFactory(dtoClass);
-  // Handle Controller decorators
+
   return applyDecorators(
     ApiOkResponse({ type, ...options }),
     SerializeOptions({
@@ -25,7 +25,6 @@ export function JsonApiResponse<T>(
   );
 }
 
-// Handle DTO decorator
 export function ExposeApiProperty(options?: ApiPropertyOptions) {
   return applyDecorators(Expose(), ApiProperty(options));
 }
