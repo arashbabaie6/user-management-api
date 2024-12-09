@@ -3,7 +3,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 
 import { AppModule } from './app.module';
-import { PrismaClientExceptionFilter } from './prisma-client-exception/prisma-client-exception.filter';
+
+import { PrismaClientExceptionFilter } from './prisma/prisma-client-exception/prisma-client-exception.filter';
 
 
 async function bootstrap() {
