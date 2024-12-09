@@ -1,21 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { ExposeApiProperty } from 'src/common/decorators/api.decorators';
+import { UserDto } from 'src/users/dto/user.dto';
 
-// Utils class
-// class LoginUserAttributesDto extends UserAttributesDto {
-//   @ApiProperty()
-//   accessToken: string;
-// }
-
-// class LoginUserDto extends PartialType(
-//   OmitType(UserDto, ['attributes'] as const),
-
-// ) {
-//   @ApiProperty()
-//   attributes: LoginUserAttributesDto
-// }
-
-// Exported class
 export class LoginDto {
   @IsEmail()
   @IsNotEmpty()
@@ -27,4 +15,9 @@ export class LoginDto {
   @MinLength(5)
   @ApiProperty({ example: 'admin1234' })
   password: string;
+}
+
+export class LoginUserDto extends OmitType(UserDto, ['access_token'] as const) {
+  @ExposeApiProperty()
+  access_token: string;
 }

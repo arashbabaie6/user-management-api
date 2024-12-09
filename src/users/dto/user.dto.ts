@@ -1,35 +1,31 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { $Enums, Role, User } from '@prisma/client';
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
+import { IsEmail, IsNotEmpty } from 'class-validator';
+import { ExposeApiProperty } from 'src/common/decorators/api.decorators';
 
-export class UserDto implements User {
-  constructor(partial: Partial<UserDto>) {
-    Object.assign(this, partial);
-  }
-
-  @ApiProperty({ example: 12 })
+export class UserDto {
+  @ExposeApiProperty({ example: 12 })
   id: number;
 
-  @ApiProperty({ example: 'admin@leovegas.com' })
+  @ExposeApiProperty({ example: 'admin@leovegas.com' })
   email: string;
 
-  @ApiProperty({ example: 'yourname' })
+  @ExposeApiProperty({ example: 'yourname' })
   name: string;
 
-  @ApiProperty({ example: Role.ADMIN })
+  @ExposeApiProperty({ example: Role.ADMIN })
   role: $Enums.Role;
 
   access_token: string;
-  
-  @ApiHideProperty()
-  @Exclude()
   password: string;
-
-  @ApiHideProperty()
-  @Exclude()
   createdAt: Date;
-
-  @ApiHideProperty()
-  @Exclude()
   updatedAt: Date;
+}
+
+export class UserEmailDto {
+  @IsEmail()
+  @IsNotEmpty()
+  @ExposeApiProperty()
+  email: string;
 }

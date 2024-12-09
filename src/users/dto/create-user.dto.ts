@@ -8,27 +8,28 @@ import {
   IsEmail,
   IsEnum
 } from 'class-validator';
+import { ExposeApiProperty } from 'src/common/decorators/api.decorators';
 
 export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
-  @ApiProperty({ example: 'yourEmail@email.com' })
+  @ExposeApiProperty({ example: 'yourEmail@email.com' })
   email: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  @ApiProperty({ example: 'yourpassword' })
+  @ExposeApiProperty({ example: 'yourpassword' })
   password: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
-  @ApiProperty({ example: 'Arash' })
+  @ExposeApiProperty({ example: 'Arash' })
   name: string;
 
   @IsOptional()
   @IsEnum(Role)
-  @ApiProperty({ default: Role.USER, enum: Role })
+  @ExposeApiProperty({ default: Role.USER, enum: Role })
   role: Role;
 }
