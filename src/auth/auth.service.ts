@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from './../prisma/prisma.service';
 
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserDto } from 'src/users/dto/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
     throw new UnauthorizedException('Email or password is incorrect');
   }
 
-  async login(email: string, password: string): Promise<{ data: UserEntity }> {
+  async login(email: string, password: string): Promise<UserDto> {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
       AuthService.incorrectInput()
@@ -27,6 +27,6 @@ export class AuthService {
     }
 
     user.access_token = this.jwtService.sign({ userId: user.id });
-    return { data: user };
+    return new UserDto(user);
   }
 }

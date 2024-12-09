@@ -6,7 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 import { roundsOfHashing } from './users.constant';
-import { UserEntity } from './entities/user.entity';
+import { UserDto } from './dto/user.dto';
 
 interface FindAll {
   page: number;
@@ -32,7 +32,7 @@ export class UsersService {
     return { data: user }
   }
 
-  async findAll({ page, perPage }: FindAll): Promise<{ data: UserEntity[], paginationInformation: { totalCount: number, page: number, perPage: number } }> {
+  async findAll({ page, perPage }: FindAll): Promise<{ data: UserDto[], paginationInformation: { totalCount: number, page: number, perPage: number } }> {
     const skip = (page - 1) * perPage;
     const [users, totalCount] = await this.prisma.$transaction([
       this.prisma.user.findMany({ skip, take: perPage }),

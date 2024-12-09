@@ -32,6 +32,6 @@ export class LoginDto {
 }
 
 export class LoginResponseDto {
-  @ApiProperty()
+  
   data: LoginUserDto
 }
