@@ -8,23 +8,24 @@ import { PrismaService } from './../prisma/prisma.service';
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) { }
 
-  static incorrectInput() {
-    throw new UnauthorizedException('Email or password is incorrect');
+  private incorrectInput() {
+    throw new UnauthorizedException('Invalid credentials');
   }
 
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
-      AuthService.incorrectInput()
+      this.incorrectInput()
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     
     if (!isPasswordValid) {
-      AuthService.incorrectInput()
+      this.incorrectInput()
     }
 
-    user.access_token = this.jwtService.sign({ userId: user.id });
-    return user;
+    const accessToken = this.jwtService.sign({ userId: user.id });
+    
+    return { ...user, access_token: accessToken }
   }
 }

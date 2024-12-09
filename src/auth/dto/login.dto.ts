@@ -1,8 +1,9 @@
-import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { ApiProperty, OmitType} from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
-import { ExposeApiProperty } from 'src/common/decorators/api.decorators';
+
 import { UserDto } from 'src/users/dto/user.dto';
+
+import { ExposeApiProperty } from 'src/common/decorators/api.decorators';
 
 export class LoginDto {
   @IsEmail()
