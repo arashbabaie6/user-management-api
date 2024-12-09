@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-import { roundsOfHashing } from '../common/constants/decorator.constant';
+import createHash from 'src/common/utils/create-hash.utils';
 
 interface FindAll {
   page: number;
@@ -16,19 +15,11 @@ interface FindAll {
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  // TODO move to common
-  async hashPassword(password) {
-    return await bcrypt.hash(
-      password,
-      roundsOfHashing,
-    );
-  }
-
   async create(createUserDto: CreateUserDto) {
-    const hashedPassword = await this.hashPassword(createUserDto.password)
-    createUserDto.password = hashedPassword;
-    const user = await this.prisma.user.create({ data: createUserDto });
-    return user
+    const hashedPassword = await createHash(createUserDto.password)
+    const userData = { ...createUserDto, password: hashedPassword };
+
+    return await this.prisma.user.create({ data: userData });
   }
 
   async findAll({ page, perPage }: FindAll) {
@@ -38,31 +29,27 @@ export class UsersService {
       this.prisma.user.count()
     ]);
 
-    return { data: users, meta: { totalItems: totalCount, currentPage: page, totalPages: perPage } }
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    return { data: users, meta: { totalItems: totalCount, currentPage: page, totalPages } }
   }
 
   async findOne(id: number) {
-    const user = await this.prisma.user.findUniqueOrThrow({ where: { id } });
-    return  user
-  }
-
-  async findOneId(id: number) {
-    const user = await this.prisma.user.findUniqueOrThrow({ where: { id } });
-    return user
+    return await this.prisma.user.findUniqueOrThrow({ where: { id } });
   }
 
   async update(email: string, updateUserDto: UpdateUserDto) {
+    let userUpdatedData = { ...updateUserDto };
+
     if (updateUserDto.password) {
-      const hashedPassword = await this.hashPassword(updateUserDto.password)
-      updateUserDto.password = hashedPassword;
+      const hashedPassword = await createHash(updateUserDto.password)
+      userUpdatedData.password = hashedPassword;
     }
 
-    const user = await this.prisma.user.update({ where: { email }, data: { ...updateUserDto } })
-    return user
+    return await this.prisma.user.update({ where: { email }, data: userUpdatedData })
   }
 
   async remove(email: string) {
-    const user = await this.prisma.user.delete({ where: { email } })
-    return user
+    return await this.prisma.user.delete({ where: { email } })
   }
 }

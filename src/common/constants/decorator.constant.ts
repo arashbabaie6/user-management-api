@@ -1,4 +1,4 @@
-const DEFAULT_PER_PAGE = 2;
+const DEFAULT_PER_PAGE = 10;
 const DEFAULT_PAGE = 1;
 
 export const decoratorConstant = {
@@ -19,5 +19,3 @@ export const decoratorConstant = {
     }
   }
 }
-
-export const roundsOfHashing = 10;

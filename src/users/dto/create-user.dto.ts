@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import {
   IsNotEmpty,
@@ -8,6 +7,7 @@ import {
   IsEmail,
   IsEnum
 } from 'class-validator';
+
 import { ExposeApiProperty } from 'src/common/decorators/api.decorators';
 
 export class CreateUserDto {

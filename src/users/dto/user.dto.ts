@@ -1,10 +1,8 @@
-import { ApiHideProperty } from '@nestjs/swagger';
 import { $Enums, Role, User } from '@prisma/client';
-import { Exclude, Expose } from 'class-transformer';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { ExposeApiProperty } from 'src/common/decorators/api.decorators';
 
-export class UserDto {
+export class UserDto implements User {
   @ExposeApiProperty({ example: 12 })
   id: number;
 

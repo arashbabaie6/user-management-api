@@ -33,10 +33,7 @@ export class UsersController {
   @ApiQuery(decoratorConstant.apiQuery.perPage)
   @ApiQuery(decoratorConstant.apiQuery.page)
   @JsonApiResponse([UserDto])
-  async findAll(
-    @Query('page') page = decoratorConstant.apiQuery.page.default,
-    @Query('perPage') perPage = decoratorConstant.apiQuery.perPage.default,
-  ) {
+  async findAll(@Query('page') page, @Query('perPage') perPage) {
     const pagination = { page: +page, perPage: +perPage };
     return await this.usersService.findAll(pagination);
   }
