@@ -29,7 +29,7 @@ export class UsersController {
   }
 
   @Get()
-  @ProtectedRoute('ADMIN', 'USER')
+  @ProtectedRoute('ADMIN')
   @ApiQuery(decoratorConstant.apiQuery.perPage)
   @ApiQuery(decoratorConstant.apiQuery.page)
   @JsonApiResponse([UserDto])
