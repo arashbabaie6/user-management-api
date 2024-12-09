@@ -13,12 +13,12 @@ export function JsonApiResponse<T>(
   dtoClass: ClassType<T> | [ClassType<T>],
   options?: Omit<ApiResponseNoStatusOptions, 'type'>,
 ) {
-  // const type = JsonApiDtoFactory(dtoClass);
+  const type = JsonApiDtoFactory(dtoClass);
   // Handle Controller decorators
   return applyDecorators(
-    ApiOkResponse({ type: JsonApiDtoFactory(dtoClass) ,...options }),
+    ApiOkResponse({ type, ...options }),
     SerializeOptions({
-      type: JsonApiDtoFactory(dtoClass),
+      type,
       strategy: 'excludeAll',
       excludeExtraneousValues: true,
     }),

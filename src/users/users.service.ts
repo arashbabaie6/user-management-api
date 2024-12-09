@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-import { roundsOfHashing } from './users.constant';
+import { roundsOfHashing } from '../common/constants/decorator.constant';
 
 interface FindAll {
   page: number;

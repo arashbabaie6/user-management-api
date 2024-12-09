@@ -1,20 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, SerializeOptions, UseInterceptors, ClassSerializerInterceptor, Request, Req, Res, HttpException, HttpStatus } from '@nestjs/common';
-import { ApiQuery, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { JsonApiResponse } from 'src/common/decorators/api.decorators';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ForbiddenException } from '@nestjs/common';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
-// Users
+// Custom Decorators
+import { JsonApiResponse } from 'src/common/decorators/api.decorators';
+import { ProtectedRoute } from 'src/common/decorators/protected-route.decorator';
+import { User } from 'src/common/decorators/user.decorator';
+
+// Services
 import { UsersService } from './users.service';
+
+// DTOs
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto, UserEmailDto } from './dto/user.dto';
 
-// Authentication
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles.guard'; 
-import { Roles } from 'src/auth/roles.decorator';
-
 // Constants
-import { decoratorConstant } from './users.constant'
+import { decoratorConstant } from '../common/constants/decorator.constant'
 
 @Controller('users')
   @ApiTags('users')
@@ -28,9 +29,7 @@ export class UsersController {
   }
 
   @Get()
-  @Roles('ADMIN')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth()
+  @ProtectedRoute('ADMIN', 'USER')
   @ApiQuery(decoratorConstant.apiQuery.perPage)
   @ApiQuery(decoratorConstant.apiQuery.page)
   @JsonApiResponse([UserDto])
@@ -43,41 +42,34 @@ export class UsersController {
   }
 
   @Patch(':email')
-  @Roles('ADMIN', 'USER')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth()
+  @ProtectedRoute('ADMIN', 'USER')
   @JsonApiResponse(UserDto)
-  async update(@Req() request, @Body() updateUserDto: UpdateUserDto, @Param() params: UserEmailDto) {
-    if (request.user.role === 'ADMIN') {
+  async update(@User() currentUser: UserDto, @Body() updateUserDto: UpdateUserDto, @Param() params: UserEmailDto) {
+    if (currentUser.role === 'ADMIN') {
       return await this.usersService.update(params.email, updateUserDto);
     }
-    if (params.email === request.user.emai) {
-      return await this.usersService.update(request.user.email, updateUserDto);
+    if (params.email === currentUser.email) {
+      return await this.usersService.update(currentUser.email, updateUserDto);
     }
 
-    throw new HttpException('Please insert your current email in params section.', HttpStatus.FORBIDDEN);
+    throw new ForbiddenException('Please insert your current email in params section');
   }
 
   @Delete(':email')
-  @Roles('ADMIN')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth()
+  @ProtectedRoute('ADMIN')
   @JsonApiResponse(UserDto)
-  async remove(@Req() request, @Param() params: UserEmailDto) {
-    if (request.user.email === params.email) {
-      throw new HttpException('You can not delete yourself!', HttpStatus.FORBIDDEN);
+  async remove(@User() currentUser: UserDto, @Param() params: UserEmailDto) {
+    if (currentUser.email === params.email) {
+      throw new ForbiddenException('You can not delete yourself!');
     }
     return await this.usersService.remove(params.email);
   }
 
   @Get('detail')
-  @Roles('ADMIN', 'USER')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth()
+  @ProtectedRoute('ADMIN', 'USER')
   @JsonApiResponse(UserDto)
-  // TODO add type for request
-  async findOne(@Req() request) {
-    return await this.usersService.findOne(request.user.id);
+  async findOne(@User() currentUser: UserDto) {
+    return await this.usersService.findOne(currentUser.id);
   }
 
 }
