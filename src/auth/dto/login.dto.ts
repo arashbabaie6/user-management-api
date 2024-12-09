@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType} from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 import { UserDto } from 'src/users/dto/user.dto';

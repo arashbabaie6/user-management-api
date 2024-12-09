@@ -1,9 +1,13 @@
-import { Type as ClassType, applyDecorators, SerializeOptions } from '@nestjs/common';
+import {
+  Type as ClassType,
+  applyDecorators,
+  SerializeOptions,
+} from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiProperty,
   ApiResponseNoStatusOptions,
-  ApiPropertyOptions
+  ApiPropertyOptions,
 } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 

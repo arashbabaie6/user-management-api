@@ -6,7 +6,10 @@ import { PrismaService } from './../prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) { }
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   private incorrectInput() {
     throw new UnauthorizedException('Invalid credentials');
@@ -15,17 +18,17 @@ export class AuthService {
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
-      this.incorrectInput()
+      this.incorrectInput();
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    
+
     if (!isPasswordValid) {
-      this.incorrectInput()
+      this.incorrectInput();
     }
 
     const accessToken = this.jwtService.sign({ userId: user.id });
-    
-    return { ...user, access_token: accessToken }
+
+    return { ...user, access_token: accessToken };
   }
 }

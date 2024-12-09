@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ForbiddenException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ForbiddenException,
+} from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
 // Custom Decorators
@@ -15,10 +25,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto, UserEmailDto } from './dto/user.dto';
 
 // Constants
-import { decoratorConstant } from '../common/constants/decorator.constant'
+import { decoratorConstant } from '../common/constants/decorator.constant';
 
 @Controller('users')
-  @ApiTags('users')
+@ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -41,7 +51,11 @@ export class UsersController {
   @Patch(':email')
   @ProtectedRoute('ADMIN', 'USER')
   @JsonApiResponse(UserDto)
-  async update(@User() currentUser: UserDto, @Body() updateUserDto: UpdateUserDto, @Param() params: UserEmailDto) {
+  async update(
+    @User() currentUser: UserDto,
+    @Body() updateUserDto: UpdateUserDto,
+    @Param() params: UserEmailDto,
+  ) {
     if (currentUser.role === 'ADMIN') {
       return await this.usersService.update(params.email, updateUserDto);
     }
@@ -49,7 +63,9 @@ export class UsersController {
       return await this.usersService.update(currentUser.email, updateUserDto);
     }
 
-    throw new ForbiddenException('Please insert your current email in params section');
+    throw new ForbiddenException(
+      'Please insert your current email in params section',
+    );
   }
 
   @Delete(':email')
@@ -68,5 +84,4 @@ export class UsersController {
   async findOne(@User() currentUser: UserDto) {
     return await this.usersService.findOne(currentUser.id);
   }
-
 }

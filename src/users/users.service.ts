@@ -16,7 +16,7 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    const hashedPassword = await createHash(createUserDto.password)
+    const hashedPassword = await createHash(createUserDto.password);
     const userData = { ...createUserDto, password: hashedPassword };
 
     return await this.prisma.user.create({ data: userData });
@@ -26,12 +26,15 @@ export class UsersService {
     const skip = (page - 1) * perPage;
     const [users, totalCount] = await this.prisma.$transaction([
       this.prisma.user.findMany({ skip, take: perPage }),
-      this.prisma.user.count()
+      this.prisma.user.count(),
     ]);
 
     const totalPages = Math.ceil(totalCount / perPage);
 
-    return { data: users, meta: { totalItems: totalCount, currentPage: page, totalPages } }
+    return {
+      data: users,
+      meta: { totalItems: totalCount, currentPage: page, totalPages },
+    };
   }
 
   async findOne(id: number) {
@@ -39,17 +42,20 @@ export class UsersService {
   }
 
   async update(email: string, updateUserDto: UpdateUserDto) {
-    let userUpdatedData = { ...updateUserDto };
+    const userUpdatedData = { ...updateUserDto };
 
     if (updateUserDto.password) {
-      const hashedPassword = await createHash(updateUserDto.password)
+      const hashedPassword = await createHash(updateUserDto.password);
       userUpdatedData.password = hashedPassword;
     }
 
-    return await this.prisma.user.update({ where: { email }, data: userUpdatedData })
+    return await this.prisma.user.update({
+      where: { email },
+      data: userUpdatedData,
+    });
   }
 
   async remove(email: string) {
-    return await this.prisma.user.delete({ where: { email } })
+    return await this.prisma.user.delete({ where: { email } });
   }
 }

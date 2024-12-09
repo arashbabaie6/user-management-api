@@ -10,12 +10,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    PrismaModule,
-    AuthModule,
-    UsersModule
-  ],
+  imports: [ConfigModule.forRoot(), PrismaModule, AuthModule, UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })

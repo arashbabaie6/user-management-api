@@ -5,7 +5,7 @@ import {
   IsString,
   MinLength,
   IsEmail,
-  IsEnum
+  IsEnum,
 } from 'class-validator';
 
 import { ExposeApiProperty } from 'src/common/decorators/api.decorators';

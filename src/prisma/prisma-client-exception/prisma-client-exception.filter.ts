@@ -15,7 +15,8 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
         const status = HttpStatus.CONFLICT;
         response.status(status).json({
           statusCode: status,
-          message: 'There is a conflict with an existing record. Please try again.',
+          message:
+            'There is a conflict with an existing record. Please try again.',
         });
         break;
       }

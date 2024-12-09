@@ -8,14 +8,14 @@ export const decoratorConstant = {
       description: 'Items per page',
       type: Number,
       required: false,
-      default: DEFAULT_PER_PAGE
+      default: DEFAULT_PER_PAGE,
     },
     page: {
       name: 'page',
       description: 'Current Page',
       type: Number,
       required: false,
-      default: DEFAULT_PAGE
-    }
-  }
-}
+      default: DEFAULT_PAGE,
+    },
+  },
+};
