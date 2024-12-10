@@ -60,3 +60,6 @@ $ npm run start:dev
 # unit tests
 $ npm run test
 ```
+
+## Swager playground
+Swagger playground would be available on http://localhost:3000/api
