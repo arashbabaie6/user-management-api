@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from './../prisma/prisma.service';
+import { LoginUserDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
     throw new UnauthorizedException('Invalid credentials');
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<LoginUserDto> {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
       this.incorrectInput();
