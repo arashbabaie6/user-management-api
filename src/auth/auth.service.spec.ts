@@ -53,14 +53,18 @@ describe('AuthService', () => {
   describe('login', () => {
     it('should throw UnauthorizedException if user not found', async () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
-      await expect(service.login('test@example.com', 'password')).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.login('test@example.com', 'password'),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException if password is incorrect', async () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
-      await expect(service.login('test@example.com', 'wrongPassword')).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.login('test@example.com', 'wrongPassword'),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should return user with access_token on successful login', async () => {

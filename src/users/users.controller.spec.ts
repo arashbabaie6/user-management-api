@@ -70,7 +70,7 @@ describe('UsersController', () => {
 
   describe('findAll', () => {
     it('should return a list of users with pagination metadata', async () => {
-      const result = await controller.findAll('1', '10');
+      const result = await controller.findAll({ page: 1, perPage: 10 });
 
       expect(usersService.findAll).toHaveBeenCalledWith({
         page: 1,
@@ -93,7 +93,11 @@ describe('UsersController', () => {
       const params: UserEmailDto = { email: 'test@example.com' };
       const currentUser: UserDto = { ...mockUser, role: 'ADMIN' };
 
-      const result = await controller.update(currentUser, updateUserDto, params);
+      const result = await controller.update(
+        currentUser,
+        updateUserDto,
+        params,
+      );
 
       expect(usersService.update).toHaveBeenCalledWith(
         params.email,
@@ -107,7 +111,11 @@ describe('UsersController', () => {
       const params: UserEmailDto = { email: 'test@example.com' };
       const currentUser: UserDto = { ...mockUser };
 
-      const result = await controller.update(currentUser, updateUserDto, params);
+      const result = await controller.update(
+        currentUser,
+        updateUserDto,
+        params,
+      );
 
       expect(usersService.update).toHaveBeenCalledWith(
         currentUser.email,

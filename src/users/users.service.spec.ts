@@ -4,11 +4,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-
 jest.mock('src/common/utils/create-hash.utils', () => ({
   default: jest.fn().mockResolvedValue('hashedPassword'),
 }));
-
 
 const mockUser = {
   id: 1,
@@ -16,7 +14,6 @@ const mockUser = {
   name: 'Test User',
   password: 'hashedPassword',
   role: 'USER',
-
 };
 
 describe('UsersService', () => {
@@ -38,10 +35,7 @@ describe('UsersService', () => {
               update: jest.fn().mockResolvedValue(mockUser),
               delete: jest.fn().mockResolvedValue(mockUser),
             },
-            $transaction: jest.fn().mockResolvedValue([
-              [mockUser],
-              1,
-            ]),
+            $transaction: jest.fn().mockResolvedValue([[mockUser], 1]),
           },
         },
       ],
@@ -105,7 +99,10 @@ describe('UsersService', () => {
         name: 'Updated User',
         password: 'newpassword',
       };
-      const updatedUser = await service.update('test@example.com', updateUserDto);
+      const updatedUser = await service.update(
+        'test@example.com',
+        updateUserDto,
+      );
 
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { email: 'test@example.com' },
@@ -117,9 +114,11 @@ describe('UsersService', () => {
     it('should update a user without modifying the password if not provided', async () => {
       const updateUserDto: UpdateUserDto = {
         name: 'Updated User',
-
       };
-      const updatedUser = await service.update('test@example.com', updateUserDto);
+      const updatedUser = await service.update(
+        'test@example.com',
+        updateUserDto,
+      );
 
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { email: 'test@example.com' },

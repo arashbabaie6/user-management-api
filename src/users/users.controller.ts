@@ -9,7 +9,7 @@ import {
   Query,
   ForbiddenException,
 } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 // Custom Decorators
 import { JsonApiResponse } from 'src/common/decorators/api.decorators';
