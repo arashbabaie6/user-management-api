@@ -60,6 +60,3 @@ $ npm run start:dev
 # unit tests
 $ npm run test
 ```
-</br>
-</br>
-
