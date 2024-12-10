@@ -7,8 +7,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import createHash from 'src/common/utils/create-hash.utils';
 
 interface FindAll {
-  page: number;
-  perPage: number;
+  page?: number;
+  perPage?: number;
 }
 
 @Injectable()
@@ -22,7 +22,7 @@ export class UsersService {
     return await this.prisma.user.create({ data: userData });
   }
 
-  async findAll({ page, perPage }: FindAll) {
+  async findAll({ page = 1, perPage = 10 }: FindAll) {
     const skip = (page - 1) * perPage;
     const [users, totalCount] = await this.prisma.$transaction([
       this.prisma.user.findMany({ skip, take: perPage }),

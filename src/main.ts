@@ -5,6 +5,7 @@ import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 import { PrismaClientExceptionFilter } from './prisma/prisma-client-exception/prisma-client-exception.filter';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,6 +25,9 @@ async function bootstrap() {
 
   app.useGlobalFilters(new PrismaClientExceptionFilter());
 
-  await app.listen(process.env.PORT ?? 3000);
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('PORT') || 3000;
+
+  await app.listen(port);
 }
 bootstrap();

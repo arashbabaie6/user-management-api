@@ -23,9 +23,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto, UserEmailDto } from './dto/user.dto';
-
-// Constants
-import { decoratorConstant } from '../common/constants/decorator.constant';
+import { UserPaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Controller('users')
 @ApiTags('users')
@@ -40,12 +38,9 @@ export class UsersController {
 
   @Get()
   @ProtectedRoute('ADMIN')
-  @ApiQuery(decoratorConstant.apiQuery.perPage)
-  @ApiQuery(decoratorConstant.apiQuery.page)
   @JsonApiResponse([UserDto])
-  async findAll(@Query('page') page, @Query('perPage') perPage) {
-    const pagination = { page: +page, perPage: +perPage };
-    return await this.usersService.findAll(pagination);
+  async findAll(@Query() paginationDto?: UserPaginationDto) {
+    return await this.usersService.findAll(paginationDto);
   }
 
   @Patch(':email')
@@ -56,11 +51,8 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
     @Param() params: UserEmailDto,
   ) {
-    if (currentUser.role === 'ADMIN') {
+    if (currentUser.role === 'ADMIN' || params.email === currentUser.email) {
       return await this.usersService.update(params.email, updateUserDto);
-    }
-    if (params.email === currentUser.email) {
-      return await this.usersService.update(currentUser.email, updateUserDto);
     }
 
     throw new ForbiddenException(
